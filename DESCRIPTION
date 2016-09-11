@@ -1,0 +1,32 @@
+Package: testTravis
+Type: Package
+Title: myThesisProposal
+Version: 0.1.1
+Date: 2016-08-15
+Author: Benyomin Hagalili
+Maintainer: Benyomin Hagalili <benyomin[at]benyomin.net>
+Description: Demography thesis reproducible research.
+License: BSD_2_clause + file LICENSE
+Depends:
+    R (>= 3.2.0),
+    methods,
+    yaml,
+    testthat (>= 1.0.0),
+    httr (>= 1.0.0)
+Imports:
+    dplyr,
+    reshape2,
+    purrr,
+    ggplot2,
+    foreign,
+    Hmisc,
+    tidyr,
+    lazyeval
+RoxygenNote: 5.0.1
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Collate:
+    'travisCI.Rmd'
+    'travisBuild.r'
