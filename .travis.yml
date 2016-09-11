@@ -3,13 +3,9 @@ sudo: false
 cache: packages
 pandoc_version: 1.17
 r_packages:
- - ggplot2
- - devtools
- - knitr
- - tidyr
- - foreign
- - Hmisc
- - purrr
- - reshape2
- - dplyr
+ "ggplot2"
+ "devtools" "knitr"
+ "tidyr"
+  "Hmisc"
+ "purrr"
  script: R < travisBuild.r --no-save
