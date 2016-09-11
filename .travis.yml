@@ -4,7 +4,8 @@ cache: packages
 pandoc_version: 1.17
 r_packages:
  "ggplot2"
- "devtools" "knitr"
+ "devtools"
+ "knitr"
  "tidyr"
   "Hmisc"
  "purrr"
