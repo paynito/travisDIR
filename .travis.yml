@@ -2,4 +2,4 @@ language: r
 sudo: false
 cache: packages
 script: travisBuild.r
-pandoc_version: 1.16
+r_packages:knitr,markdown,dplyr,reshape2,purrr,foreign,Hmisc,tidyr
