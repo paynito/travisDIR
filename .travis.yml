@@ -1,6 +1,6 @@
 language: R
 sudo: false
 cache: packages
-script: travisBuild.r
+script: R travisBuild.r
 r_packages:knitr,markdown,dplyr,reshape2,purrr,foreign,Hmisc,tidyr
 osx_image: xcode8
