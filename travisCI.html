@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title></title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<pre><code class="r">library(ggplot2)
+library(foreign)
+library(Hmisc)
+</code></pre>
+
+<pre><code>## Loading required package: lattice
+</code></pre>
+
+<pre><code>## Loading required package: survival
+</code></pre>
+
+<pre><code>## Loading required package: Formula
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;Hmisc&#39;
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     combine, src, summarize
+</code></pre>
+
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     format.pval, round.POSIXt, trunc.POSIXt, units
+</code></pre>
+
+<pre><code class="r">library(reshape2)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;reshape2&#39;
+</code></pre>
+
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     smiths
+</code></pre>
+
+<pre><code class="r">library(dplyr)
+library(tidyr)
+file456 &lt;- spss.get(&quot;/Users/AbuDavid/school/census/f456/f456ind.por&quot;, use.value.labels=TRUE)
+</code></pre>
+
+<pre><code>## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+</code></pre>
+
+<p>Begin with data from Public Use File 2014, file f456.</p>
+
+<pre><code class="r">                                        #
+subSetInd2014&lt;-dplyr::select(file456, YEARSUR, WPLDIST,INCSAL)
+head(subSetInd2014)
+</code></pre>
+
+<pre><code>##   YEARSUR  WPLDIST INCSAL
+## 1    2014     &lt;NA&gt;      0
+## 2    2014     &lt;NA&gt;      0
+## 3    2014   Center   5555
+## 4    2014 Gush Dan   8081
+## 5    2014 Tel-Aviv   6446
+## 6    2014 Tel-Aviv   3473
+</code></pre>
+
+<pre><code class="r">summary(subSetInd2014)
+</code></pre>
+
+<pre><code>##     YEARSUR         WPLDIST          INCSAL      
+##  Min.   :2014   Center  : 3010   Min.   :     0  
+##  1st Qu.:2014   Tel-Aviv: 2551   1st Qu.:     0  
+##  Median :2014   North   : 1766   Median :     0  
+##  Mean   :2014   Haifa   : 1522   Mean   :  3403  
+##  3rd Qu.:2014   Gush Dan: 1468   3rd Qu.:  4749  
+##  Max.   :2014   (Other) : 1516   Max.   :254219  
+##                 NA&#39;s    :16117
+</code></pre>
+
+<pre><code class="r">                                        names(subSetInd2014)
+</code></pre>
+
+<pre><code>## [1] &quot;YEARSUR&quot; &quot;WPLDIST&quot; &quot;INCSAL&quot;
+</code></pre>
+
+<pre><code class="r">                                        ggplot(aes(y=INCSAL,
+                                                   x=YEARSUR
+                                                    ),
+                                   data=subSetInd2014)+geom_boxplot()
+</code></pre>
+
+<p><img src="figure/partTwo-1.png" alt="plot of chunk partTwo">
+       Plot is stretched by very few individuals with extremely high incomes.</p>
+
+<pre><code>  Remove these to see the normal salaries more clearly.
+
+   ```r
+   richRemoved &lt;- subSetInd2014
+     # richRemoved[richRemoved$INCSAL &gt; 1200,] #testSyntax
+   count(richRemoved[richRemoved$INCSAL &gt; 40000,]) # &gt; $10k USD/month
+   ```
+
+   ```
+   ## # A tibble: 1 × 1
+   ##       n
+   ##   &lt;int&gt;
+   ## 1   130
+   ```
+
+   ```r
+     # remove the 130 richest, regraph
+   richRemoved&lt;-richRemoved[richRemoved$INCSAL&lt;40000,]
+   # ggplot(aes(y=INCSAL,x=YEARSUR),
+   #       data=richRemoved)+geom_boxplot()
+   naRemoved &lt;-richRemoved %&gt;% filter(complete.cases(richRemoved))
+    # ggplot(aes(y=INCSAL,  x=YEARSUR  ),
+    #                                   data=naRemoved)+geom_boxplot()
+   ```
+Here we look at the non-wealthy in the entire country, defined as those who make less than 40k NIS /month, approximately $10k USD/month.
+In shekels, their mean income is 7,488. The middle 50% of them have incomes lying between 2,344 and 10,234 NIS/month.
+
+```r
+  haifaData2014&lt;-  naRemoved %&gt;% filter(WPLDIST == &quot;Haifa&quot;)
+## ggplot(aes(y=INCSAL,
+##            x=YEARSUR,
+##            col=&quot;green&quot;
+##                                                     ),
+##        data=haifaData)+geom_boxplot()
+##   summary(haifaData)
+
+  centerData2014 &lt;-naRemoved %&gt;% filter(WPLDIST == &quot;Center&quot;)
+  ## ggplot(aes(y=INCSAL,
+  ##            x=YEARSUR,
+  ##            col=&quot;blue&quot;),
+  ##        data=centerData)+geom_boxplot()
+  ## summary(centerData)
+```
+When looking at Haifa, the mean income falls by around 500 NIS to 6944,
+50% of incomes are between 2084 and 9448 NIS.  
+Mean income in the Center is around 500 NIS more than the national mean, and more than 1000 NIS more than the Haifa mean, at 8017. 
+50% of the non-wealthy in Center earn between 2582 and 11,000 NIS. The first quartile is 500 NIS above that of Haifa and the third quartile is 1150 NIS about that of Haifa (11,000 vs. 9448).
+Open new dataSet, Household Expenditure Survey 2013, in file f457.
+
+
+```r
+judeaData2014&lt;-  naRemoved %&gt;% filter(WPLDIST == &quot;Judea / Samaria&quot;)
+## ggplot(aes(y=INCSAL,
+##            x=YEARSUR,
+##            col=&quot;orange&quot;
+##                                                     ),
+##        data=judeaData)+geom_boxplot()
+  summary(judeaData)
+```
+
+```
+## Error in summary(judeaData): object &#39;judeaData&#39; not found
+```
+
+```r
+areas &lt;- c(&quot;Haifa&quot;,&quot;Center&quot;,&quot;Judea / Samaria&quot;)
+file457 &lt;- spss.get(&quot;/Users/AbuDavid/school/census/f457/f457ind.por&quot;, use.value.labels=TRUE)
+```
+
+```
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+```
+
+```r
+subSetInd2013&lt;-dplyr::select(file457, YEARSUR, WPLDIST,INCSAL)
+ richRemoved2013&lt;-subSetInd2013[subSetInd2013$INCSAL&lt;40000,]
+naRemoved2013 &lt;-richRemoved2013 %&gt;% filter(complete.cases(richRemoved2013))
+judeaData2013&lt;-  naRemoved2013%&gt;% filter(WPLDIST == &quot;Judea / Samaria&quot;)
+haifaData2013&lt;-  naRemoved2013 %&gt;% filter(WPLDIST == &quot;Haifa&quot;)
+centerData2013&lt;- naRemoved2013 %&gt;% filter(WPLDIST == &quot;Center&quot;)
+national2013&lt;-naRemoved2013
+summary(national2013)
+```
+
+```
+##     YEARSUR                WPLDIST         INCSAL     
+##  Min.   :2013   Jerusalem      :1300   Min.   :    0  
+##  1st Qu.:2013   North          :1857   1st Qu.: 2468  
+##  Median :2013   Haifa          :1668   Median : 5690  
+##  Mean   :2013   Center         :3335   Mean   : 7319  
+##  3rd Qu.:2013   Tel-Aviv       :2987   3rd Qu.: 9837  
+##  Max.   :2013   Gush Dan       :1582   Max.   :39967  
+##                 Judea / Samaria: 315
+```
+
+```r
+summary(judeaData2013)
+```
+
+```
+##     YEARSUR                WPLDIST        INCSAL     
+##  Min.   :2013   Jerusalem      :  0   Min.   :    0  
+##  1st Qu.:2013   North          :  0   1st Qu.:  725  
+##  Median :2013   Haifa          :  0   Median : 4899  
+##  Mean   :2013   Center         :  0   Mean   : 5977  
+##  3rd Qu.:2013   Tel-Aviv       :  0   3rd Qu.: 8425  
+##  Max.   :2013   Gush Dan       :  0   Max.   :35162  
+##                 Judea / Samaria:315
+```
+
+```r
+summary(haifaData2013)
+```
+
+```
+##     YEARSUR                WPLDIST         INCSAL     
+##  Min.   :2013   Jerusalem      :   0   Min.   :    0  
+##  1st Qu.:2013   North          :   0   1st Qu.: 2086  
+##  Median :2013   Haifa          :1668   Median : 5584  
+##  Mean   :2013   Center         :   0   Mean   : 7129  
+##  3rd Qu.:2013   Tel-Aviv       :   0   3rd Qu.: 9496  
+##  Max.   :2013   Gush Dan       :   0   Max.   :39938  
+##                 Judea / Samaria:   0
+```
+
+```r
+summary(centerData2013)
+```
+
+```
+##     YEARSUR                WPLDIST         INCSAL     
+##  Min.   :2013   Jerusalem      :   0   Min.   :    0  
+##  1st Qu.:2013   North          :   0   1st Qu.: 2500  
+##  Median :2013   Haifa          :   0   Median : 6024  
+##  Mean   :2013   Center         :3335   Mean   : 8040  
+##  3rd Qu.:2013   Tel-Aviv       :   0   3rd Qu.:11368  
+##  Max.   :2013   Gush Dan       :   0   Max.   :39967  
+##                 Judea / Samaria:   0
+```
+</code></pre>
+
+<pre><code class="r">ggplot(aes(y=INCSAL,
+           x=YEARSUR),
+  data=judeaData2013)+geom_boxplot()
+</code></pre>
+
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"></p>
+
+<pre><code class="r">ggplot(aes(y=INCSAL,
+           x=YEARSUR
+                       ),
+       data=haifaData2013)+geom_boxplot()
+</code></pre>
+
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3"></p>
+
+<pre><code class="r">ggplot(aes(y=INCSAL,
+           x=YEARSUR
+                       ),
+       data=centerData2013)+geom_boxplot()
+</code></pre>
+
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-3-2.png" alt="plot of chunk unnamed-chunk-3"></p>
+
+<pre><code class="r">test1 &lt;- head(centerData2013)
+test2 &lt;- head(haifaData2013)
+test3 &lt;- head(judeaData2013)
+test6 &lt;- head(centerData2014)
+test4 &lt;- head(haifaData2014)
+test5 &lt;- head(judeaData2014)
+test &lt;- rbind(test1, test2, test3, test4, test5, test6)
+
+ggplot(aes(y=INCSAL,
+           x=YEARSUR,
+           col=WPLDIST
+                       ),
+       data=test)+geom_boxplot()
+</code></pre>
+
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+## Don&#39;t know how to automatically pick scale for object of type labelled/integer. Defaulting to continuous.
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-3-3.png" alt="plot of chunk unnamed-chunk-3"></p>
+
+<pre><code class="r">#
+# summary(test$INCSAL)
+#
+# mean(test1$YEARSUR)
+# mean(test6$YEARSUR)
+#
+# 
+</code></pre>
+
+</body>
+
+</html>
