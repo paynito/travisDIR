@@ -1,5 +1,6 @@
-#set working dir
-setwd("/Users/AbuDavid/school/proposalR/travisDIR")             #Load packages
+                                        #set working dir
+setwd("/Users/AbuDavid/personal/travisDIR/")
+#setwd("/Users/AbuDavid/school/proposalR/travisDIR")             #Load packages
 require(knitr)
 require(markdown)
 
